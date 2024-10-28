@@ -1,16 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:social/components/controllers/authcontroller.dart';
 
-class SignInButton extends StatelessWidget {
+class SignInButton extends ConsumerWidget {
   final String labelString;
-
   final String? imageUrl;
   const SignInButton({super.key, required this.labelString, this.imageUrl});
+
+  void signIn(WidgetRef ref) {
+    print("Test");
+    ref.read(authControllerProvider).signInWithGoogle();
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: ElevatedButton.icon(
-        onPressed: () {},
+        onPressed: () => signIn(ref),
         label: Text(
           labelString,
           style: const TextStyle(

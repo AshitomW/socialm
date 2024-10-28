@@ -32,7 +32,7 @@ class LoginScreen extends StatelessWidget {
           const TextFields(
             hintText: "Password",
           ),
-          const SignInButton(labelString: "Sign In"),
+          // const SignInButton(labelString: "Sign In"),
           SignInButton(
             labelString: "Sign In With Google",
             imageUrl: Images.googleIcon,

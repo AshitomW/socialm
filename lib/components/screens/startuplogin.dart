@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:social/components/screens/auth/loginscreen.dart';
 import 'package:social/components/screens/auth/registerscreen.dart';
-import 'package:social/themes/colorscheme.dart';
 
 class Startuplogin extends StatefulWidget {
   const Startuplogin({super.key});
@@ -25,7 +24,6 @@ class _StartuploginState extends State<Startuplogin> {
         children: pages,
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colorscheme.drawerColor,
         currentIndex: currentPage,
         selectedFontSize: 15,
         unselectedFontSize: 10,
