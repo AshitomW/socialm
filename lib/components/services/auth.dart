@@ -4,8 +4,11 @@ import "package:google_sign_in/google_sign_in.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:social/components/providers/fb_providers.dart";
 import "package:social/components/model/usermodel.dart";
+import "package:social/core/failure.dart";
 import "package:social/core/firebase_constants.dart";
 import "package:social/core/images.dart";
+import "package:social/core/typdef.dart";
+import "package:fpdart/fpdart.dart";
 
 final authServiceProvider = Provider(
   (ref) => AuthService(
@@ -29,7 +32,7 @@ class AuthService {
         _auth = auth,
         _googleSignIn = googleSignIn;
 
-  void signInWithGoogle() async {
+  FutureEither<UserModel> signInWithGoogle() async {
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       final googleAuthentication = await googleUser?.authentication;
@@ -37,20 +40,29 @@ class AuthService {
         accessToken: googleAuthentication?.accessToken,
         idToken: googleAuthentication?.idToken,
       );
+      late UserModel userModel;
       UserCredential userCredential = await _auth.signInWithCredential(credentials);
-      UserModel userModel = UserModel(
-        name: userCredential.user!.displayName ?? "No Name",
-        profilePicture: userCredential.user!.photoURL ?? Images.avatarDefault,
-        banner: Images.bannerDefault,
-        uid: userCredential.user!.uid,
-        isAuthenticated: true,
-        score: 0,
-        awards: [],
-      );
-
-      await _users.doc(userModel.uid).set(userModel.toMap());
+      if (userCredential.additionalUserInfo!.isNewUser) {
+        userModel = UserModel(
+          name: userCredential.user!.displayName ?? "No Name",
+          profilePicture: userCredential.user!.photoURL ?? Images.avatarDefault,
+          banner: Images.bannerDefault,
+          uid: userCredential.user!.uid,
+          isAuthenticated: true,
+          score: 0,
+          awards: [],
+        );
+        await _users.doc(userModel.uid).set(userModel.toMap());
+      }
+      return right(userModel);
+    } on FirebaseException catch (error) {
+      throw error.message!;
     } catch (error) {
-      print(error);
+      return left(
+        Failure(
+          message: error.toString(),
+        ),
+      );
     } // Throw error in error handlers
   }
 }

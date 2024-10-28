@@ -8,8 +8,7 @@ class SignInButton extends ConsumerWidget {
   const SignInButton({super.key, required this.labelString, this.imageUrl});
 
   void signIn(WidgetRef ref) {
-    print("Test");
-    ref.read(authControllerProvider).signInWithGoogle();
+    ref.read(authControllerProvider).signInWithGoogle(ref.context);
   }
 
   @override
