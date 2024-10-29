@@ -11,7 +11,7 @@ class CommunityProfile extends ConsumerWidget {
   const CommunityProfile({required this.name, super.key});
 
   void navigateToModTools(context) {
-    Routemaster.of(context).push("/modtools");
+    Routemaster.of(context).push("/modtools/$name");
   }
 
   @override
