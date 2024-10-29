@@ -3,7 +3,7 @@ import "package:routemaster/routemaster.dart";
 import "package:social/components/controllers/authcontroller.dart";
 import 'package:social/components/services/community.dart';
 import "package:flutter_riverpod/flutter_riverpod.dart";
-import "package:social/components/model/community.dart";
+import "package:social/components/model/communitymodel.dart";
 import "package:social/components/widgets/errorSnack.dart";
 import "package:social/core/images.dart";
 
@@ -15,6 +15,10 @@ final userCommunityProvider = StreamProvider((ref) {
 final communityControllerProvider = StateNotifierProvider<CommunityController, bool>((ref) {
   final communityService = ref.watch(communityServiceProvider);
   return CommunityController(communityService: communityService, ref: ref);
+});
+
+final getCommunityByNameProvider = StreamProvider.family((ref, String name) {
+  return ref.watch(communityControllerProvider.notifier).getCommunityByName(name);
 });
 
 class CommunityController extends StateNotifier<bool> {
@@ -48,5 +52,9 @@ class CommunityController extends StateNotifier<bool> {
   Stream<List<Community>> getUserCommunities() {
     final uid = _ref.read(userDataProvider)!.uid;
     return _communityservice.getUserCommunities(uid);
+  }
+
+  Stream<Community> getCommunityByName(String name) {
+    return _communityservice.getCommunityByName(name);
   }
 }

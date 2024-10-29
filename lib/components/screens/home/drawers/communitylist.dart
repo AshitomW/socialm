@@ -13,6 +13,10 @@ class CommunityLists extends ConsumerWidget {
     Routemaster.of(context).push("/create_community");
   }
 
+  void navigateToCommunityProfile(BuildContext context, String communityName) {
+    Routemaster.of(context).push("/r/$communityName");
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Drawer(
@@ -31,7 +35,7 @@ class CommunityLists extends ConsumerWidget {
                           itemBuilder: (BuildContext context, int index) {
                             final community = data[index];
                             return ListTile(
-                              onTap: () {},
+                              onTap: () => navigateToCommunityProfile(context, community.name),
                               leading: CircleAvatar(
                                 radius: 15,
                                 backgroundImage: NetworkImage(community.avatar),

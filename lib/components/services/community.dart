@@ -5,7 +5,7 @@ import 'package:social/core/failure.dart';
 import 'package:social/core/firebase_constants.dart';
 import 'package:social/core/typdef.dart';
 import "package:fpdart/fpdart.dart";
-import "package:social/components/model/community.dart";
+import "package:social/components/model/communitymodel.dart";
 
 final communityServiceProvider = Provider((ref) {
   return CommunityService(firestore: ref.watch(firestoreProvider));
@@ -40,5 +40,12 @@ class CommunityService {
       }
       return communities;
     });
+  }
+
+  Stream<Community> getCommunityByName(String name) {
+    return _communities
+        .doc(name)
+        .snapshots()
+        .map((event) => Community.fromMap(event.data() as Map<String, dynamic>));
   }
 }
