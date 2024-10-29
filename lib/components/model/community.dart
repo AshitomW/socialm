@@ -52,10 +52,10 @@ class Community {
       banner: map['banner'] as String,
       avatar: map['avatar'] as String,
       members: List<String>.from(
-        (map['members'] as List<String>),
+        (map['members'] as List<dynamic>),
       ),
       moderators: List<String>.from(
-        (map['moderators'] as List<String>),
+        (map['moderators'] as List<dynamic>),
       ),
     );
   }

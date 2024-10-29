@@ -7,6 +7,11 @@ import "package:social/components/model/community.dart";
 import "package:social/components/widgets/errorSnack.dart";
 import "package:social/core/images.dart";
 
+final userCommunityProvider = StreamProvider((ref) {
+  final communityController = ref.watch(communityControllerProvider.notifier);
+  return communityController.getUserCommunities();
+});
+
 final communityControllerProvider = StateNotifierProvider<CommunityController, bool>((ref) {
   final communityService = ref.watch(communityServiceProvider);
   return CommunityController(communityService: communityService, ref: ref);
@@ -38,5 +43,10 @@ class CommunityController extends StateNotifier<bool> {
       showSnackBar(context, "Community Created Succesfully");
       Routemaster.of(context).pop();
     });
+  }
+
+  Stream<List<Community>> getUserCommunities() {
+    final uid = _ref.read(userDataProvider)!.uid;
+    return _communityservice.getUserCommunities(uid);
   }
 }
