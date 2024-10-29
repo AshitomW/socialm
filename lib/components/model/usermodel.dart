@@ -62,7 +62,7 @@ class UserModel {
       isAuthenticated: map['isAuthenticated'] as bool,
       score: map['score'] as int,
       awards: List<String>.from(
-        (map['awards'] as List<String>),
+        (map['awards'] as List<dynamic>),
       ),
     );
   }

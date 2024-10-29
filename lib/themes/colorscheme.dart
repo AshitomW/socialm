@@ -9,7 +9,7 @@ class Colorscheme {
   static var blueColor = Colors.blue.shade300;
 
   static var darkModeAppTheme = ThemeData.dark().copyWith(
-    scaffoldBackgroundColor: const Color(0xFF151515),
+    scaffoldBackgroundColor: const Color(0xFF010101),
     cardColor: greyColor,
     appBarTheme: const AppBarTheme(
       backgroundColor: drawerColor,

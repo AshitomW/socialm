@@ -24,6 +24,8 @@ class AuthService {
   final GoogleSignIn _googleSignIn;
 
   CollectionReference get _users => _fireStore.collection(FirebaseConstants.userCollection);
+
+  Stream<User?> get authStateChange => _auth.authStateChanges();
   AuthService(
       {required FirebaseFirestore firestore,
       required FirebaseAuth auth,
@@ -53,6 +55,8 @@ class AuthService {
           awards: [],
         );
         await _users.doc(userModel.uid).set(userModel.toMap());
+      } else {
+        userModel = await getUserData(userCredential.user!.uid).first;
       }
       return right(userModel);
     } on FirebaseException catch (error) {
@@ -64,5 +68,12 @@ class AuthService {
         ),
       );
     } // Throw error in error handlers
+  }
+
+  Stream<UserModel> getUserData(String uid) {
+    return _users
+        .doc(uid)
+        .snapshots()
+        .map((event) => UserModel.fromMap(event.data() as Map<String, dynamic>));
   }
 }
