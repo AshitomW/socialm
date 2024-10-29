@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:routemaster/routemaster.dart";
 import "package:social/components/controllers/authcontroller.dart";
 import "package:social/components/controllers/communityController.dart";
 import "package:social/core/error_text.dart";
@@ -8,6 +9,10 @@ import "package:social/core/loader.dart";
 class CommunityProfile extends ConsumerWidget {
   final String name;
   const CommunityProfile({required this.name, super.key});
+
+  void navigateToModTools(context) {
+    Routemaster.of(context).push("/modtools");
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -52,7 +57,7 @@ class CommunityProfile extends ConsumerWidget {
                             ),
                             community.moderators.contains(user.uid)
                                 ? OutlinedButton(
-                                    onPressed: () {},
+                                    onPressed: () => navigateToModTools(context),
                                     style: ElevatedButton.styleFrom(
                                       padding: const EdgeInsetsDirectional.symmetric(
                                           horizontal: 25, vertical: 8),
