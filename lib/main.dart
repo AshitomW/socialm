@@ -41,17 +41,16 @@ class _MyAppState extends ConsumerState<MyApp> {
   Widget build(BuildContext context) {
     return ref.watch(authStateChangeProvider).when(
           data: (data) {
-            if (data != null && userModel == null) {
-              getUserData(ref, data);
-            }
-
             return MaterialApp.router(
               debugShowCheckedModeBanner: false,
               title: "Plebbit",
               theme: Colorscheme.darkModeAppTheme,
               routerDelegate: RoutemasterDelegate(routesBuilder: (context) {
-                if (userModel != null) {
-                  return loggedInRoute;
+                if (data != null) {
+                  getUserData(ref, data);
+                  if (userModel != null) {
+                    return loggedInRoute;
+                  }
                 }
                 return loggedOutRoute;
               }),

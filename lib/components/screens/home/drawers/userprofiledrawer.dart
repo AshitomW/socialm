@@ -4,6 +4,9 @@ import "package:social/components/controllers/authcontroller.dart";
 
 class ProfileDrawer extends ConsumerWidget {
   const ProfileDrawer({super.key});
+  void logOut(WidgetRef ref) {
+    ref.read(authControllerProvider.notifier).logOut();
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -38,7 +41,7 @@ class ProfileDrawer extends ConsumerWidget {
                 Icons.logout,
                 color: Colors.redAccent,
               ),
-              onTap: () => {},
+              onTap: () => logOut(ref),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
