@@ -16,6 +16,11 @@ final userCommunityProvider = StreamProvider((ref) {
   return communityController.getUserCommunities();
 });
 
+final searchCommunityProvider = StreamProvider.family((ref, String query) {
+  final communityController = ref.watch(communityControllerProvider.notifier);
+  return communityController.searchCommunity(query);
+});
+
 final communityControllerProvider = StateNotifierProvider<CommunityController, bool>((ref) {
   final communityService = ref.watch(communityServiceProvider);
   final storageRepoProvider = ref.watch(firebaseStorageProvider);
@@ -107,5 +112,9 @@ class CommunityController extends StateNotifier<bool> {
       showSnackBar(context, "Successfully Updated Community Profile");
       Routemaster.of(context).pop();
     });
+  }
+
+  Stream<List<Community>> searchCommunity(String query) {
+    return _communityservice.searchCommunity(query);
   }
 }
