@@ -11,9 +11,9 @@ import "package:social/components/model/communitymodel.dart";
 import "package:social/components/widgets/errorSnack.dart";
 import "package:social/core/images.dart";
 
-final userCommunityProvider = StreamProvider((ref) {
+final userCommunityProvider = StreamProvider.family((ref, String uid) {
   final communityController = ref.watch(communityControllerProvider.notifier);
-  return communityController.getUserCommunities();
+  return communityController.getUserCommunities(uid);
 });
 
 final searchCommunityProvider = StreamProvider.family((ref, String query) {
@@ -68,8 +68,8 @@ class CommunityController extends StateNotifier<bool> {
     });
   }
 
-  Stream<List<Community>> getUserCommunities() {
-    final uid = _ref.read(userDataProvider)!.uid;
+  Stream<List<Community>> getUserCommunities(String uid) {
+    // final uid = _ref.read(userDataProvider)!.uid;
     return _communityservice.getUserCommunities(uid);
   }
 

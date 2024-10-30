@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:routemaster/routemaster.dart";
+import "package:social/components/controllers/authcontroller.dart";
 import "package:social/components/controllers/communityController.dart";
 import "package:social/core/error_text.dart";
 import "package:social/core/loader.dart";
@@ -19,6 +20,7 @@ class CommunityLists extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(userDataProvider)!;
     return Drawer(
       child: SafeArea(
         child: Column(
@@ -28,7 +30,7 @@ class CommunityLists extends ConsumerWidget {
               leading: const Icon(Icons.add),
               onTap: () => navigateToCommunity(context),
             ),
-            ref.watch(userCommunityProvider).when(
+            ref.watch(userCommunityProvider(user.uid)).when(
                 data: (data) => Expanded(
                       child: ListView.builder(
                           itemCount: data.length,
