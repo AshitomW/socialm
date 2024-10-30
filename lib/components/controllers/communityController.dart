@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import "package:fpdart/fpdart.dart";
+import "package:social/components/services/storagerepo.dart";
+import "dart:io";
+import "package:social/core/typdef.dart";
 import "package:routemaster/routemaster.dart";
 import "package:social/components/controllers/authcontroller.dart";
 import 'package:social/components/services/community.dart';
@@ -14,7 +18,12 @@ final userCommunityProvider = StreamProvider((ref) {
 
 final communityControllerProvider = StateNotifierProvider<CommunityController, bool>((ref) {
   final communityService = ref.watch(communityServiceProvider);
-  return CommunityController(communityService: communityService, ref: ref);
+  final storageRepoProvider = ref.watch(firebaseStorageProvider);
+  return CommunityController(
+    communityService: communityService,
+    ref: ref,
+    storageRepository: storageRepoProvider,
+  );
 });
 
 final getCommunityByNameProvider = StreamProvider.family((ref, String name) {
@@ -23,10 +32,15 @@ final getCommunityByNameProvider = StreamProvider.family((ref, String name) {
 
 class CommunityController extends StateNotifier<bool> {
   final CommunityService _communityservice;
+  final StorageRepository _storageRepository;
   final Ref _ref;
-  CommunityController({required CommunityService communityService, required Ref ref})
+  CommunityController(
+      {required CommunityService communityService,
+      required Ref ref,
+      required StorageRepository storageRepository})
       : _communityservice = communityService,
         _ref = ref,
+        _storageRepository = storageRepository,
         super(false);
 
   void createCommunity(String name, BuildContext context) async {
@@ -56,5 +70,42 @@ class CommunityController extends StateNotifier<bool> {
 
   Stream<Community> getCommunityByName(String name) {
     return _communityservice.getCommunityByName(name);
+  }
+
+  void editCommunity({
+    required File? profilepic,
+    required File? bannerpic,
+    required Community community,
+    required BuildContext context,
+  }) async {
+    state = true;
+    if (profilepic != null) {
+      final results = await _storageRepository.storeFile(
+        path: "communities/profile",
+        id: community.name,
+        file: profilepic,
+      );
+      results.fold(
+        (error) => showSnackBar(context, error.message),
+        (dataUrl) => community = community.copyWith(avatar: dataUrl),
+      );
+    }
+    if (bannerpic != null) {
+      final results = await _storageRepository.storeFile(
+        path: "communities/banner",
+        id: community.name,
+        file: bannerpic,
+      );
+      results.fold(
+        (error) => showSnackBar(context, error.message),
+        (dataUrl) => community = community.copyWith(banner: dataUrl),
+      );
+    }
+    final results = await _communityservice.editCommunity(community);
+    state = false;
+    results.fold((error) => showSnackBar(context, error.message), (sucess) {
+      showSnackBar(context, "Successfully Updated Community Profile");
+      Routemaster.of(context).pop();
+    });
   }
 }
