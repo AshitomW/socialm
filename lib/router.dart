@@ -7,6 +7,7 @@ import "package:social/components/screens/community/mod_tools.dart";
 import "package:social/components/screens/home/homescreen.dart";
 import "package:social/components/screens/auth/startuplogin.dart";
 import "package:flutter/material.dart";
+import "package:social/components/screens/userprofile/userprofilescreen.dart";
 
 final loggedOutRoute = RouteMap(routes: {
   "/": (_) => const MaterialPage(child: Startuplogin()),
@@ -27,6 +28,9 @@ final loggedInRoute = RouteMap(
         ),
     "/add-mod/:name": (route) => MaterialPage(
           child: AddModScreen(communityName: route.pathParameters["name"]!),
-        )
+        ),
+    "/u/:uid": (route) => MaterialPage(
+          child: UserProfileScreen(uid: route.pathParameters["uid"]!),
+        ),
   },
 );
