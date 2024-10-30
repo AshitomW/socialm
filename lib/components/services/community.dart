@@ -104,4 +104,16 @@ class CommunityService {
       return left(Failure(message: error.toString()));
     }
   }
+
+  FutureVoid addModeratorToCommunity(String communityName, List<String> uids) async {
+    try {
+      return right(_communities.doc(communityName).update({
+        "moderators": uids,
+      }));
+    } on FirebaseException catch (e) {
+      throw e.message!;
+    } catch (e) {
+      return left(Failure(message: e.toString()));
+    }
+  }
 }

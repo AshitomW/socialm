@@ -15,7 +15,7 @@ class AddModScreen extends ConsumerStatefulWidget {
 
 class _AddModScreenState extends ConsumerState<AddModScreen> {
   Set<String> modUids = {};
-  bool initalizeMod = true;
+  int initalizeCounter = 0;
   void addUid(String uid) {
     setState(() {
       modUids.add(uid);
@@ -28,13 +28,21 @@ class _AddModScreenState extends ConsumerState<AddModScreen> {
     });
   }
 
+  void saveModerators() {
+    ref
+        .read(communityControllerProvider.notifier)
+        .addModeratorToCommunity(widget.communityName, modUids.toList(), context: context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              saveModerators();
+            },
             icon: const Icon(Icons.save),
           )
         ],
@@ -47,10 +55,10 @@ class _AddModScreenState extends ConsumerState<AddModScreen> {
 
                 return ref.watch(getUserDataProvider(member)).when(
                     data: (user) {
-                      if (community.moderators.contains(member) && initalizeMod) {
+                      if (community.moderators.contains(member) && initalizeCounter > 0) {
                         modUids.add(member);
                       }
-                      initalizeMod = false;
+                      initalizeCounter++;
                       return CheckboxListTile(
                         value: modUids.contains(user.uid),
                         onChanged: (val) {
