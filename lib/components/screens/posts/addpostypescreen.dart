@@ -63,7 +63,9 @@ class _AddPostTypeScreenState extends ConsumerState<AddPostTypeScreen> {
             selectedCommunity: selectedCommunity ?? communities[0],
             description: descriptionController.text.trim(),
           );
-    } else if (widget.postType == "Link" && titleController.text.isNotEmpty) {
+    } else if (widget.postType == "Link" &&
+        titleController.text.isNotEmpty &&
+        linkController.text.isNotEmpty) {
       ref.read(postControllerProvider.notifier).shareLinkPost(
           context: context,
           title: titleController.text.trim(),
@@ -152,7 +154,7 @@ class _AddPostTypeScreenState extends ConsumerState<AddPostTypeScreen> {
                     ),
                   if (isTypeLink)
                     TextField(
-                      controller: descriptionController,
+                      controller: linkController,
                       decoration: InputDecoration(
                         hintText: "Enter Link Here",
                         filled: true,
