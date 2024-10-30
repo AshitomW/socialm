@@ -10,6 +10,7 @@ import 'package:social/firebase_options.dart';
 import 'package:social/router.dart';
 import 'package:social/themes/colorscheme.dart';
 import 'package:routemaster/routemaster.dart';
+import 'package:social/themes/themehandler.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,7 +45,7 @@ class _MyAppState extends ConsumerState<MyApp> {
             return MaterialApp.router(
               debugShowCheckedModeBanner: false,
               title: "Plebbit",
-              theme: Colorscheme.darkModeAppTheme,
+              theme: ref.watch(themeDataProvider),
               routerDelegate: RoutemasterDelegate(routesBuilder: (context) {
                 if (data != null) {
                   getUserData(ref, data);

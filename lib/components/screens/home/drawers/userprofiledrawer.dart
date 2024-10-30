@@ -2,6 +2,8 @@ import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:routemaster/routemaster.dart";
 import "package:social/components/controllers/authcontroller.dart";
+import "package:social/core/enums.dart";
+import "package:social/themes/themehandler.dart";
 
 class ProfileDrawer extends ConsumerWidget {
   const ProfileDrawer({super.key});
@@ -11,6 +13,10 @@ class ProfileDrawer extends ConsumerWidget {
 
   void navigateToUserProfile(BuildContext context, String uid) {
     Routemaster.of(context).push("/u/$uid");
+  }
+
+  void toggleTheme(WidgetRef ref) {
+    ref.read(themeDataProvider.notifier).toggleTheme();
   }
 
   @override
@@ -48,13 +54,16 @@ class ProfileDrawer extends ConsumerWidget {
               ),
               onTap: () => logOut(ref),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text("Dark theme"),
-                Switch.adaptive(value: true, onChanged: (val) {}),
-              ],
-            )
+            ListTile(
+              title: const Text("Dark Mode"),
+              trailing: Switch.adaptive(
+                  value: ref.watch(themeDataProvider.notifier).currentTheme == Thememode.dark
+                      ? true
+                      : false,
+                  onChanged: (val) {
+                    toggleTheme(ref);
+                  }),
+            ),
           ],
         ),
       ),
