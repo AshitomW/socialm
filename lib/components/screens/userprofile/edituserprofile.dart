@@ -10,6 +10,7 @@ import "package:social/core/imagepicker.dart";
 import "package:social/components/model/communitymodel.dart";
 import "package:social/core/loader.dart";
 import "package:social/themes/colorscheme.dart";
+import "package:social/themes/themehandler.dart";
 
 class EditProfileScreen extends ConsumerStatefulWidget {
   final String uid;
@@ -67,6 +68,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(userProfileControllerProvider);
+    final currentTheme = ref.watch(themeDataProvider);
     return ref.watch(getUserDataProvider(widget.uid)).when(
         data: (community) => Scaffold(
               appBar: AppBar(
@@ -98,8 +100,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                       borderType: BorderType.RRect,
                                       dashPattern: const [10, 4],
                                       strokeCap: StrokeCap.round,
-                                      color:
-                                          Colorscheme.darkModeAppTheme.textTheme.bodyMedium!.color!,
+                                      color: currentTheme.textTheme.bodyMedium!.color!,
                                       child: Container(
                                         width: double.infinity,
                                         height: 150,
@@ -139,6 +140,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                             decoration: InputDecoration(
                               hintText: "Name",
                               filled: true,
+                              fillColor: currentTheme.canvasColor,
                               focusedBorder: OutlineInputBorder(
                                 borderSide: const BorderSide(color: Colors.blue),
                                 borderRadius: BorderRadius.circular(10),

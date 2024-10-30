@@ -4,6 +4,7 @@ import "package:routemaster/routemaster.dart";
 import "package:social/components/controllers/authcontroller.dart";
 import "package:social/components/controllers/communityController.dart";
 import "package:social/core/loader.dart";
+import "package:social/themes/themehandler.dart";
 
 import "../../../core/error_text.dart";
 

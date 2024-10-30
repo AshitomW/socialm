@@ -18,6 +18,7 @@ class TextFields extends StatelessWidget {
       padding: const EdgeInsets.all(16.0),
       child: TextField(
         decoration: InputDecoration(
+          filled: true,
           hintText: hintText,
           border: const OutlineInputBorder(
             borderRadius: BorderRadius.all(

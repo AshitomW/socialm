@@ -9,6 +9,7 @@ import "package:social/core/imagepicker.dart";
 import "package:social/core/loader.dart";
 import "package:social/core/images.dart";
 import "package:social/themes/colorscheme.dart";
+import "package:social/themes/themehandler.dart";
 
 class EditCommunityScreen extends ConsumerStatefulWidget {
   final String name;
@@ -47,6 +48,7 @@ class _EditCommunityScreenState extends ConsumerState<EditCommunityScreen> {
   @override
   Widget build(BuildContext context) {
     bool isLoading = ref.watch(communityControllerProvider);
+    final currentTheme = ref.watch(themeDataProvider);
     return ref.watch(getCommunityByNameProvider(widget.name)).when(
         data: (community) => Scaffold(
               appBar: AppBar(
@@ -80,8 +82,7 @@ class _EditCommunityScreenState extends ConsumerState<EditCommunityScreen> {
                                       borderType: BorderType.RRect,
                                       dashPattern: const [10, 4],
                                       strokeCap: StrokeCap.round,
-                                      color:
-                                          Colorscheme.darkModeAppTheme.textTheme.bodyMedium!.color!,
+                                      color: currentTheme.textTheme.bodyMedium!.color!,
                                       child: Container(
                                         width: double.infinity,
                                         height: 150,
