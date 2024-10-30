@@ -1,4 +1,5 @@
 import "package:routemaster/routemaster.dart";
+import "package:social/components/screens/community/addmoderatorscreen.dart";
 import "package:social/components/screens/community/community_profile.dart";
 import "package:social/components/screens/community/create_community.dart";
 import "package:social/components/screens/community/edit_community.dart";
@@ -23,6 +24,9 @@ final loggedInRoute = RouteMap(
         ),
     "/editcommunity/:name": (route) => MaterialPage(
           child: EditCommunityScreen(name: route.pathParameters["name"]!),
+        ),
+    "/add-mod/:name": (route) => MaterialPage(
+          child: AddModScreen(communityName: route.pathParameters["name"]!),
         )
   },
 );
