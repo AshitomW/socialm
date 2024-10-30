@@ -66,6 +66,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isLoading = ref.watch(userProfileControllerProvider);
     return ref.watch(getUserDataProvider(widget.uid)).when(
         data: (community) => Scaffold(
               appBar: AppBar(
@@ -78,74 +79,77 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                   ),
                 ],
               ),
-              body: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 220,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Stack(
-                          children: [
-                            GestureDetector(
-                              onTap: selectBannerImage,
-                              child: DottedBorder(
-                                radius: const Radius.circular(10),
-                                borderType: BorderType.RRect,
-                                dashPattern: const [10, 4],
-                                strokeCap: StrokeCap.round,
-                                color: Colorscheme.darkModeAppTheme.textTheme.bodyMedium!.color!,
-                                child: Container(
-                                  width: double.infinity,
-                                  height: 150,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
+              body: isLoading
+                  ? const Loader()
+                  : Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 220,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Stack(
+                                children: [
+                                  GestureDetector(
+                                    onTap: selectBannerImage,
+                                    child: DottedBorder(
+                                      radius: const Radius.circular(10),
+                                      borderType: BorderType.RRect,
+                                      dashPattern: const [10, 4],
+                                      strokeCap: StrokeCap.round,
+                                      color:
+                                          Colorscheme.darkModeAppTheme.textTheme.bodyMedium!.color!,
+                                      child: Container(
+                                        width: double.infinity,
+                                        height: 150,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                        child: bannerFile != null
+                                            ? Image.file(bannerFile!)
+                                            : community.banner.isEmpty ||
+                                                    community.banner == Images.bannerDefault
+                                                ? const Center(
+                                                    child: Icon(Icons.camera_alt),
+                                                  )
+                                                : Image.network(community.banner),
+                                      ),
+                                    ),
                                   ),
-                                  child: bannerFile != null
-                                      ? Image.file(bannerFile!)
-                                      : community.banner.isEmpty ||
-                                              community.banner == Images.bannerDefault
-                                          ? const Center(
-                                              child: Icon(Icons.camera_alt),
-                                            )
-                                          : Image.network(community.banner),
-                                ),
+                                  Positioned(
+                                    bottom: 20,
+                                    left: 20,
+                                    child: GestureDetector(
+                                      onTap: selectProfileImage,
+                                      child: CircleAvatar(
+                                        backgroundImage: profileFile != null
+                                            ? FileImage(profileFile!)
+                                            : NetworkImage(community.profilePicture),
+                                        radius: 32,
+                                      ),
+                                    ),
+                                  )
+                                ],
                               ),
                             ),
-                            Positioned(
-                              bottom: 20,
-                              left: 20,
-                              child: GestureDetector(
-                                onTap: selectProfileImage,
-                                child: CircleAvatar(
-                                  backgroundImage: profileFile != null
-                                      ? FileImage(profileFile!)
-                                      : NetworkImage(community.profilePicture),
-                                  radius: 32,
-                                ),
+                          ),
+                          TextField(
+                            controller: nameController,
+                            decoration: InputDecoration(
+                              hintText: "Name",
+                              filled: true,
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: const BorderSide(color: Colors.blue),
+                                borderRadius: BorderRadius.circular(10),
                               ),
-                            )
-                          ],
-                        ),
+                              border: InputBorder.none,
+                              contentPadding: const EdgeInsets.all(18),
+                            ),
+                          )
+                        ],
                       ),
                     ),
-                    TextField(
-                      controller: nameController,
-                      decoration: InputDecoration(
-                        hintText: "Name",
-                        filled: true,
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.blue),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        border: InputBorder.none,
-                        contentPadding: const EdgeInsets.all(18),
-                      ),
-                    )
-                  ],
-                ),
-              ),
             ),
         error: (error, stackTract) => ErrorText(error: error.toString()),
         loading: () => const Loader());
