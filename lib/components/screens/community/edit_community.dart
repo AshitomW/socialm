@@ -63,52 +63,60 @@ class _EditCommunityScreenState extends ConsumerState<EditCommunityScreen> {
               ),
               body: isLoading
                   ? const Loader()
-                  : SizedBox(
-                      height: 220,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Stack(
-                          children: [
-                            GestureDetector(
-                              onTap: selectBannerImage,
-                              child: DottedBorder(
-                                radius: const Radius.circular(10),
-                                borderType: BorderType.RRect,
-                                dashPattern: const [10, 4],
-                                strokeCap: StrokeCap.round,
-                                color: Colorscheme.darkModeAppTheme.textTheme.bodyMedium!.color!,
-                                child: Container(
-                                  width: double.infinity,
-                                  height: 150,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
+                  : Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            height: 220,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Stack(
+                                children: [
+                                  GestureDetector(
+                                    onTap: selectBannerImage,
+                                    child: DottedBorder(
+                                      radius: const Radius.circular(10),
+                                      borderType: BorderType.RRect,
+                                      dashPattern: const [10, 4],
+                                      strokeCap: StrokeCap.round,
+                                      color:
+                                          Colorscheme.darkModeAppTheme.textTheme.bodyMedium!.color!,
+                                      child: Container(
+                                        width: double.infinity,
+                                        height: 150,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                        child: bannerFile != null
+                                            ? Image.file(bannerFile!)
+                                            : community.banner.isEmpty ||
+                                                    community.banner == Images.bannerDefault
+                                                ? const Center(
+                                                    child: Icon(Icons.camera_alt),
+                                                  )
+                                                : Image.network(community.banner),
+                                      ),
+                                    ),
                                   ),
-                                  child: bannerFile != null
-                                      ? Image.file(bannerFile!)
-                                      : community.banner.isEmpty ||
-                                              community.banner == Images.bannerDefault
-                                          ? const Center(
-                                              child: Icon(Icons.camera_alt),
-                                            )
-                                          : Image.network(community.banner),
-                                ),
+                                  Positioned(
+                                    bottom: 20,
+                                    left: 20,
+                                    child: GestureDetector(
+                                      onTap: selectProfileImage,
+                                      child: CircleAvatar(
+                                        backgroundImage: profileFile != null
+                                            ? FileImage(profileFile!)
+                                            : NetworkImage(community.avatar),
+                                        radius: 32,
+                                      ),
+                                    ),
+                                  )
+                                ],
                               ),
                             ),
-                            Positioned(
-                              bottom: 20,
-                              left: 20,
-                              child: GestureDetector(
-                                onTap: selectProfileImage,
-                                child: CircleAvatar(
-                                  backgroundImage: profileFile != null
-                                      ? FileImage(profileFile!)
-                                      : NetworkImage(community.avatar),
-                                  radius: 32,
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
             ),

@@ -7,6 +7,7 @@ import "package:social/components/screens/community/mod_tools.dart";
 import "package:social/components/screens/home/homescreen.dart";
 import "package:social/components/screens/auth/startuplogin.dart";
 import "package:flutter/material.dart";
+import "package:social/components/screens/userprofile/edituserprofile.dart";
 import "package:social/components/screens/userprofile/userprofilescreen.dart";
 
 final loggedOutRoute = RouteMap(routes: {
@@ -31,6 +32,9 @@ final loggedInRoute = RouteMap(
         ),
     "/u/:uid": (route) => MaterialPage(
           child: UserProfileScreen(uid: route.pathParameters["uid"]!),
+        ),
+    "/edit-profile/:uid": (route) => MaterialPage(
+          child: EditProfileScreen(uid: route.pathParameters["uid"]!),
         ),
   },
 );
