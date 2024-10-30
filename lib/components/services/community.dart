@@ -80,4 +80,28 @@ class CommunityService {
       return communities;
     });
   }
+
+  FutureVoid joinCommunity(String communityName, String userId) async {
+    try {
+      return right(_communities.doc(communityName).update({
+        "members": FieldValue.arrayUnion([userId])
+      }));
+    } on FirebaseException catch (error) {
+      throw error.message!;
+    } catch (error) {
+      return left(Failure(message: error.toString()));
+    }
+  }
+
+  FutureVoid leaveCommunity(String communityName, String userId) async {
+    try {
+      return right(_communities.doc(communityName).update({
+        "members": FieldValue.arrayRemove([userId])
+      }));
+    } on FirebaseException catch (error) {
+      throw error.message!;
+    } catch (error) {
+      return left(Failure(message: error.toString()));
+    }
+  }
 }

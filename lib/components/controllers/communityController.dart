@@ -10,6 +10,7 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:social/components/model/communitymodel.dart";
 import "package:social/components/widgets/errorSnack.dart";
 import "package:social/core/images.dart";
+import "package:social/core/typdef.dart";
 
 final userCommunityProvider = StreamProvider.family((ref, String uid) {
   final communityController = ref.watch(communityControllerProvider.notifier);
@@ -116,5 +117,23 @@ class CommunityController extends StateNotifier<bool> {
 
   Stream<List<Community>> searchCommunity(String query) {
     return _communityservice.searchCommunity(query);
+  }
+
+  void joinCommunity(Community community, BuildContext context) async {
+    final user = _ref.read(userDataProvider)!;
+    final isUserAMember = community.members.contains(user.uid);
+    FutureVoid result;
+    if (isUserAMember) {
+      result = _communityservice.leaveCommunity(community.name, user.uid);
+    } else {
+      result = _communityservice.joinCommunity(community.name, user.uid);
+    }
+    (await result).fold((error) => showSnackBar(context, error.message), (success) {
+      if (isUserAMember) {
+        showSnackBar(context, "Community Left Sucessfully");
+      } else {
+        showSnackBar(context, "Joined Community Sucessfully");
+      }
+    });
   }
 }

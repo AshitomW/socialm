@@ -5,6 +5,7 @@ import "package:social/components/controllers/authcontroller.dart";
 import "package:social/components/controllers/communityController.dart";
 import "package:social/core/error_text.dart";
 import "package:social/core/loader.dart";
+import "package:social/components/model/communitymodel.dart";
 
 class CommunityProfile extends ConsumerWidget {
   final String name;
@@ -12,6 +13,11 @@ class CommunityProfile extends ConsumerWidget {
 
   void navigateToModTools(context) {
     Routemaster.of(context).push("/modtools/$name");
+  }
+
+  void joinCommunity(
+      {required WidgetRef ref, required Community community, required BuildContext context}) {
+    ref.read(communityControllerProvider.notifier).joinCommunity(community, context);
   }
 
   @override
@@ -68,7 +74,10 @@ class CommunityProfile extends ConsumerWidget {
                                     child: const Text("Mod tools"),
                                   )
                                 : OutlinedButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      joinCommunity(
+                                          ref: ref, community: community, context: context);
+                                    },
                                     style: ElevatedButton.styleFrom(
                                       padding: const EdgeInsetsDirectional.symmetric(
                                           horizontal: 25, vertical: 8),
@@ -96,7 +105,7 @@ class CommunityProfile extends ConsumerWidget {
                   ),
                 ];
               },
-              body: Center(child: const Text("Displaying Posts")),
+              body: const Center(child: Text("Displaying Posts")),
             );
           },
           error: (error, stackTrace) => ErrorText(error: error.toString()),
