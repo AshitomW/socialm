@@ -81,4 +81,32 @@ class AuthService {
     await _googleSignIn.signOut();
     await _auth.signOut();
   }
+
+  FutureEither<UserModel> signInAsGuest() async {
+    try {
+      var userCredential = await _auth.signInAnonymously();
+      UserModel userModel;
+
+      userModel = UserModel(
+        name: "Guest",
+        profilePicture: Images.avatarDefault,
+        banner: Images.bannerDefault,
+        uid: userCredential.user!.uid,
+        isAuthenticated: false,
+        score: 0,
+        awards: [],
+      );
+      await _users.doc(userModel.uid).set(userModel.toMap());
+
+      return right(userModel);
+    } on FirebaseException catch (error) {
+      throw error.message!;
+    } catch (error) {
+      return left(
+        Failure(
+          message: error.toString(),
+        ),
+      );
+    } // Throw error in error handlers
+  }
 }

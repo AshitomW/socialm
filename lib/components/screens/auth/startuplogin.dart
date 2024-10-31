@@ -14,6 +14,19 @@ class Startuplogin extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isLoading = ref.watch(authControllerProvider);
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "Sign In",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        actions: [
+          TextButton(
+              onPressed: () {
+                ref.read(authControllerProvider.notifier).signInAsGuest(context);
+              },
+              child: const Text("Skip"))
+        ],
+      ),
       body: !isLoading
           ? SafeArea(
               child: Column(
