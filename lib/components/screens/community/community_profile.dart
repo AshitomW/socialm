@@ -3,6 +3,7 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:routemaster/routemaster.dart";
 import "package:social/components/controllers/authcontroller.dart";
 import "package:social/components/controllers/communityController.dart";
+import "package:social/components/screens/posts/postcard.dart";
 import "package:social/core/error_text.dart";
 import "package:social/core/loader.dart";
 import "package:social/components/model/communitymodel.dart";
@@ -105,7 +106,19 @@ class CommunityProfile extends ConsumerWidget {
                   ),
                 ];
               },
-              body: const Center(child: Text("Displaying Posts")),
+              body: ref.watch(communityProfilePostProvider(community.name)).when(
+                  data: (posts) {
+                    return ListView.builder(
+                        itemCount: posts.length,
+                        itemBuilder: (context, index) {
+                          final post = posts[index];
+                          return PostCard(post: post);
+                        });
+                  },
+                  error: (error, stackTrace) {
+                    return ErrorText(error: error.toString());
+                  },
+                  loading: () => const Loader()),
             );
           },
           error: (error, stackTrace) => ErrorText(error: error.toString()),

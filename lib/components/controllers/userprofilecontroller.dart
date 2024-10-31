@@ -5,10 +5,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:social/components/controllers/authcontroller.dart';
 import 'package:social/components/model/communitymodel.dart';
+import 'package:social/components/model/postmodel.dart';
 import 'package:social/components/model/usermodel.dart';
 import 'package:social/components/services/storagerepo.dart';
 import 'package:social/components/services/userprofile.dart';
 import 'package:social/components/widgets/errorSnack.dart';
+
+final getUserPostProvider = StreamProvider.family((ref, String uid) {
+  return ref.read(userProfileControllerProvider.notifier).getUserPosts(uid);
+});
 
 final userProfileControllerProvider = StateNotifierProvider<UserProfileController, bool>((ref) {
   final userProfileService = ref.watch(userProfileServiceProvider);
@@ -73,5 +78,9 @@ class UserProfileController extends StateNotifier<bool> {
       _ref.read(userDataProvider.notifier).update((state) => user);
       Routemaster.of(context).pop();
     });
+  }
+
+  Stream<List<Post>> getUserPosts(String uid) {
+    return _userprofileservice.getUserPosts(uid);
   }
 }

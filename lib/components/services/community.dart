@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import "package:flutter_riverpod/flutter_riverpod.dart";
+import 'package:social/components/model/postmodel.dart';
 import 'package:social/components/providers/fb_providers.dart';
 import 'package:social/core/failure.dart';
 import 'package:social/core/firebase_constants.dart';
@@ -31,6 +32,7 @@ class CommunityService {
 
   CollectionReference get _communities =>
       _firestore.collection(FirebaseConstants.communitiesCollection);
+  CollectionReference get _posts => _firestore.collection(FirebaseConstants.postsCollection);
 
   Stream<List<Community>> getUserCommunities(String uid) {
     return _communities.where('members', arrayContains: uid).snapshots().map((event) {
@@ -115,5 +117,19 @@ class CommunityService {
     } catch (e) {
       return left(Failure(message: e.toString()));
     }
+  }
+
+  Stream<List<Post>> getCommunityPosts(String communityName) {
+    return _posts
+        .where("communityName", isEqualTo: communityName)
+        .orderBy("createdAt", descending: true)
+        .snapshots()
+        .map(
+          (event) => event.docs
+              .map(
+                (e) => Post.fromMap(e.data() as Map<String, dynamic>),
+              )
+              .toList(),
+        );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import "package:social/components/model/postmodel.dart";
 
 import "package:social/components/services/storagerepo.dart";
 import "dart:io";
@@ -30,6 +31,10 @@ final communityControllerProvider = StateNotifierProvider<CommunityController, b
     ref: ref,
     storageRepository: storageRepoProvider,
   );
+});
+
+final communityProfilePostProvider = StreamProvider.family((ref, String communityName) {
+  return ref.read(communityControllerProvider.notifier).getCommunityPosts(communityName);
 });
 
 final getCommunityByNameProvider = StreamProvider.family((ref, String name) {
@@ -142,5 +147,9 @@ class CommunityController extends StateNotifier<bool> {
     final result = await _communityservice.addModeratorToCommunity(communityName, uids);
     result.fold((failure) => showSnackBar(context, failure.message),
         (success) => Routemaster.of(context).pop());
+  }
+
+  Stream<List<Post>> getCommunityPosts(String communityName) {
+    return _communityservice.getCommunityPosts(communityName);
   }
 }
