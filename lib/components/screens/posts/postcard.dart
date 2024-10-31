@@ -179,114 +179,116 @@ class PostCard extends ConsumerWidget {
                                 ),
                               ),
                             ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  IconButton(
+                          SizedBox(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Row(
+                                  children: [
+                                    IconButton(
+                                      onPressed: () {
+                                        if (isGuest) {
+                                          return;
+                                        }
+                                        upVotePost(ref);
+                                      },
+                                      icon: Icon(
+                                        Constants.up,
+                                        size: 30,
+                                        color: post.upvotes.contains(user.uid)
+                                            ? Colorscheme.redColor
+                                            : null,
+                                      ),
+                                    ),
+                                    Text(
+                                      "${post.upvotes.length - post.downvotes.length == 0 ? "Vote" : post.upvotes.length - post.downvotes.length}",
+                                      style: const TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    IconButton(
+                                      onPressed: () {
+                                        if (isGuest) {
+                                          return;
+                                        }
+                                        downVotePost(ref);
+                                      },
+                                      icon: Icon(
+                                        Constants.down,
+                                        size: 30,
+                                        color: post.downvotes.contains(user.uid)
+                                            ? Colorscheme.blueColor
+                                            : null,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    IconButton(
+                                      onPressed: () {
+                                        navigateToPost(context);
+                                      },
+                                      icon: const Icon(Icons.comment),
+                                    ),
+                                    Text(
+                                      "${post.commentCount == 0 ? "Comment" : post.commentCount}",
+                                      style: const TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                // ref.watch(getCommunityByNameProvider(post.communityName)).when(
+                                //       data: (community) {
+                                //         if (community.moderators.contains(user.uid)) {
+                                //           return IconButton(
+                                //             onPressed: () {},
+                                //             icon: const Icon(Icons.add_moderator),
+                                //           );
+                                //         }
+                                //         return const SizedBox.shrink();
+                                //       },
+                                //       error: (error, stackTrace) => ErrorText(
+                                //         error: error.toString(),
+                                //       ),
+                                //       loading: () => const Loader(),
+                                //     ),
+                                IconButton(
                                     onPressed: () {
-                                      if (isGuest) {
-                                        return;
-                                      }
-                                      upVotePost(ref);
-                                    },
-                                    icon: Icon(
-                                      Constants.up,
-                                      size: 30,
-                                      color: post.upvotes.contains(user.uid)
-                                          ? Colorscheme.redColor
-                                          : null,
-                                    ),
-                                  ),
-                                  Text(
-                                    "${post.upvotes.length - post.downvotes.length == 0 ? "Vote" : post.upvotes.length - post.downvotes.length}",
-                                    style: const TextStyle(
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  IconButton(
-                                    onPressed: () {
-                                      if (isGuest) {
-                                        return;
-                                      }
-                                      downVotePost(ref);
-                                    },
-                                    icon: Icon(
-                                      Constants.down,
-                                      size: 30,
-                                      color: post.downvotes.contains(user.uid)
-                                          ? Colorscheme.blueColor
-                                          : null,
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  IconButton(
-                                    onPressed: () {
-                                      navigateToPost(context);
-                                    },
-                                    icon: const Icon(Icons.comment),
-                                  ),
-                                  Text(
-                                    "${post.commentCount == 0 ? "Comment" : post.commentCount}",
-                                    style: const TextStyle(
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              ref.watch(getCommunityByNameProvider(post.communityName)).when(
-                                    data: (community) {
-                                      if (community.moderators.contains(user.uid)) {
-                                        return IconButton(
-                                          onPressed: () {},
-                                          icon: const Icon(Icons.add_moderator),
-                                        );
-                                      }
-                                      return const SizedBox();
-                                    },
-                                    error: (error, stackTrace) => ErrorText(
-                                      error: error.toString(),
-                                    ),
-                                    loading: () => const Loader(),
-                                  ),
-                              IconButton(
-                                  onPressed: () {
-                                    if (isGuest) return;
-                                    showDialog(
-                                        context: context,
-                                        builder: (context) => Dialog(
-                                              child: Padding(
-                                                padding: const EdgeInsets.all(16),
-                                                child: GridView.builder(
-                                                  shrinkWrap: true,
-                                                  gridDelegate:
-                                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                                          crossAxisCount: 4),
-                                                  itemCount: user.awards.length,
-                                                  itemBuilder: (context, index) {
-                                                    final award = user.awards[index];
-                                                    return GestureDetector(
-                                                      onTap: () {
-                                                        awardPost(ref, award, context);
-                                                      },
-                                                      child: Padding(
-                                                        padding: const EdgeInsets.all(16.0),
-                                                        child: Image.asset(Images.awards[award]!),
-                                                      ),
-                                                    );
-                                                  },
+                                      if (isGuest) return;
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) => Dialog(
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(16),
+                                                  child: GridView.builder(
+                                                    shrinkWrap: true,
+                                                    gridDelegate:
+                                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                                            crossAxisCount: 4),
+                                                    itemCount: user.awards.length,
+                                                    itemBuilder: (context, index) {
+                                                      final award = user.awards[index];
+                                                      return GestureDetector(
+                                                        onTap: () {
+                                                          awardPost(ref, award, context);
+                                                        },
+                                                        child: Padding(
+                                                          padding: const EdgeInsets.all(16.0),
+                                                          child: Image.asset(Images.awards[award]!),
+                                                        ),
+                                                      );
+                                                    },
+                                                  ),
                                                 ),
-                                              ),
-                                            ));
-                                  },
-                                  icon: const Icon(Icons.card_giftcard_outlined))
-                            ],
+                                              ));
+                                    },
+                                    icon: const Icon(Icons.card_giftcard_outlined))
+                              ],
+                            ),
                           )
                         ],
                       ),
