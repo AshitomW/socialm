@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:social/components/controllers/authcontroller.dart';
+import 'package:social/components/controllers/userprofilecontroller.dart';
 import 'package:social/components/model/commentmodel.dart';
 import 'package:social/components/model/communitymodel.dart';
 import 'package:social/components/model/postmodel.dart';
@@ -10,6 +11,7 @@ import 'package:social/components/services/postservice.dart';
 import 'package:social/components/services/storagerepo.dart';
 import "package:flutter/material.dart";
 import 'package:social/components/widgets/errorSnack.dart';
+import 'package:social/core/enums.dart';
 import 'package:uuid/uuid.dart';
 
 final postControllerProvider = StateNotifierProvider<PostController, bool>((ref) {
@@ -74,6 +76,7 @@ class PostController extends StateNotifier<bool> {
     );
 
     final result = await _postservice.addPost(post);
+    _ref.read(userProfileControllerProvider.notifier).updateUserScore(UserScore.textPost);
     state = false;
     result.fold((failure) => showSnackBar(context, failure.message), (success) {
       showSnackBar(context, "Posted Successfully");
@@ -107,6 +110,7 @@ class PostController extends StateNotifier<bool> {
     );
 
     final result = await _postservice.addPost(post);
+    _ref.read(userProfileControllerProvider.notifier).updateUserScore(UserScore.linkPost);
     state = false;
     result.fold((failure) => showSnackBar(context, failure.message), (success) {
       showSnackBar(context, "Posted Successfully");
@@ -143,6 +147,7 @@ class PostController extends StateNotifier<bool> {
         link: dataUrl,
       );
       final result = await _postservice.addPost(post);
+      _ref.read(userProfileControllerProvider.notifier).updateUserScore(UserScore.imagePost);
       state = false;
       result.fold((failure) => showSnackBar(context, failure.message), (success) {
         showSnackBar(context, "Posted Successfully");
@@ -160,6 +165,7 @@ class PostController extends StateNotifier<bool> {
 
   void deletePost(Post post, BuildContext context) async {
     final result = await _postservice.deletePost(post);
+    _ref.read(userProfileControllerProvider.notifier).updateUserScore(UserScore.deletePost);
     result.fold((failure) => showSnackBar(context, "Could not delete the post. Try again later !"),
         (success) => showSnackBar(context, "Successfully deleted the post"));
   }
@@ -189,6 +195,7 @@ class PostController extends StateNotifier<bool> {
       profilePic: user.profilePicture,
     );
     final result = await _postservice.addComment(comment);
+    _ref.read(userProfileControllerProvider.notifier).updateUserScore(UserScore.comment);
     result.fold((failure) => showSnackBar(context, failure.message), (success) => null);
   }
 

@@ -5,6 +5,7 @@ import 'package:social/components/model/postmodel.dart';
 
 import 'package:social/components/model/usermodel.dart';
 import 'package:social/components/providers/fb_providers.dart';
+import 'package:social/core/enums.dart';
 import 'package:social/core/failure.dart';
 import "package:social/core/firebase_constants.dart";
 import 'package:social/core/typdef.dart';
@@ -42,5 +43,15 @@ class UserProfileService {
               )
               .toList(),
         );
+  }
+
+  FutureVoid updateUserScore(UserModel user) async {
+    try {
+      return right(_users.doc(user.uid).update({"score": user.score}));
+    } on FirebaseException catch (e) {
+      throw e.message!;
+    } catch (e) {
+      return left(Failure(message: e.toString()));
+    }
   }
 }

@@ -10,6 +10,7 @@ import 'package:social/components/model/usermodel.dart';
 import 'package:social/components/services/storagerepo.dart';
 import 'package:social/components/services/userprofile.dart';
 import 'package:social/components/widgets/errorSnack.dart';
+import 'package:social/core/enums.dart';
 
 final getUserPostProvider = StreamProvider.family((ref, String uid) {
   return ref.read(userProfileControllerProvider.notifier).getUserPosts(uid);
@@ -82,5 +83,13 @@ class UserProfileController extends StateNotifier<bool> {
 
   Stream<List<Post>> getUserPosts(String uid) {
     return _userprofileservice.getUserPosts(uid);
+  }
+
+  void updateUserScore(UserScore score) async {
+    UserModel user = _ref.watch(userDataProvider)!;
+    user = user.copyWith(score: user.score + score.score);
+
+    final res = await _userprofileservice.updateUserScore(user);
+    res.fold((l) => null, (r) => _ref.read(userDataProvider.notifier).update((state) => user));
   }
 }
