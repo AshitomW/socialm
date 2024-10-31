@@ -18,6 +18,7 @@ class UserProfileScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final currentUser = ref.watch(userDataProvider)!;
     return Scaffold(
       body: ref.watch(getUserDataProvider(uid)).when(
           data: (user) {
@@ -44,19 +45,21 @@ class UserProfileScreen extends ConsumerWidget {
                         Container(
                           alignment: Alignment.bottomLeft,
                           padding: const EdgeInsets.all(20),
-                          child: OutlinedButton(
-                            onPressed: () {
-                              navigateToEditProfile(context);
-                            },
-                            style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsetsDirectional.symmetric(
-                                  horizontal: 25, vertical: 8),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                            ),
-                            child: const Text("Edit Profile"),
-                          ),
+                          child: currentUser.uid == uid
+                              ? OutlinedButton(
+                                  onPressed: () {
+                                    navigateToEditProfile(context);
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    padding: const EdgeInsetsDirectional.symmetric(
+                                        horizontal: 25, vertical: 8),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
+                                  child: const Text("Edit Profile"),
+                                )
+                              : const SizedBox(),
                         ),
                       ],
                     ),

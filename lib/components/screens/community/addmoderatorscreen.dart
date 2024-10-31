@@ -55,7 +55,7 @@ class _AddModScreenState extends ConsumerState<AddModScreen> {
 
                 return ref.watch(getUserDataProvider(member)).when(
                     data: (user) {
-                      if (community.moderators.contains(member) && initalizeCounter > 0) {
+                      if (community.moderators.contains(member) && initalizeCounter == 0) {
                         modUids.add(member);
                       }
                       initalizeCounter++;

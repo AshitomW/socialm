@@ -2,10 +2,14 @@ import "package:any_link_preview/any_link_preview.dart";
 import "package:flutter/material.dart";
 
 import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:routemaster/routemaster.dart";
 import "package:social/components/controllers/authcontroller.dart";
+import "package:social/components/controllers/communityController.dart";
 import "package:social/components/controllers/postcontroller.dart";
 import "package:social/components/model/postmodel.dart";
 import "package:social/core/constants.dart";
+import "package:social/core/error_text.dart";
+import "package:social/core/loader.dart";
 import "package:social/themes/colorscheme.dart";
 import "package:social/themes/themehandler.dart";
 
@@ -23,6 +27,14 @@ class PostCard extends ConsumerWidget {
 
   void downVotePost(WidgetRef ref) async {
     ref.read(postControllerProvider.notifier).downvote(post);
+  }
+
+  void navigateToUserProfile(BuildContext context) {
+    Routemaster.of(context).push("/u/${post.uid}");
+  }
+
+  void navigateToCommunity(BuildContext context) {
+    Routemaster.of(context).push("/r/${post.communityName}");
   }
 
   @override
@@ -58,11 +70,14 @@ class PostCard extends ConsumerWidget {
                             children: [
                               Row(
                                 children: [
-                                  CircleAvatar(
-                                    backgroundImage: NetworkImage(
-                                      post.communityProfilePic,
+                                  GestureDetector(
+                                    onTap: () => navigateToCommunity(context),
+                                    child: CircleAvatar(
+                                      backgroundImage: NetworkImage(
+                                        post.communityProfilePic,
+                                      ),
+                                      radius: 16,
                                     ),
-                                    radius: 16,
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 8),
@@ -76,10 +91,13 @@ class PostCard extends ConsumerWidget {
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                        Text(
-                                          "u/${post.username}",
-                                          style: const TextStyle(
-                                            fontSize: 12,
+                                        GestureDetector(
+                                          onTap: () => navigateToUserProfile(context),
+                                          child: Text(
+                                            "u/${post.username}",
+                                            style: const TextStyle(
+                                              fontSize: 12,
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -133,6 +151,7 @@ class PostCard extends ConsumerWidget {
                               ),
                             ),
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Row(
                                 children: [
@@ -183,7 +202,22 @@ class PostCard extends ConsumerWidget {
                                     ),
                                   ),
                                 ],
-                              )
+                              ),
+                              ref.watch(getCommunityByNameProvider(post.communityName)).when(
+                                    data: (community) {
+                                      if (community.moderators.contains(user.uid)) {
+                                        return IconButton(
+                                          onPressed: () {},
+                                          icon: const Icon(Icons.add_moderator),
+                                        );
+                                      }
+                                      return const SizedBox();
+                                    },
+                                    error: (error, stackTrace) => ErrorText(
+                                      error: error.toString(),
+                                    ),
+                                    loading: () => const Loader(),
+                                  ),
                             ],
                           )
                         ],
