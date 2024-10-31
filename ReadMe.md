@@ -97,10 +97,10 @@ flutter run
 - Make sure to handle user authentication and Firestore rules in your Firebase console for better security.
 
 ### Screenshots
-<img src="https://github.com/user-attachments/assets/0f035764-cfe0-44e9-a2b6-7473d0a1f62a" alt="Homescreen" width="276" height="600"/>
-<img src="https://github.com/user-attachments/assets/4a87580c-f78b-4dfb-8a78-21cef9d03d6c" alt="Profile Drawer" width="276" height="600"/>
-<img src="https://github.com/user-attachments/assets/9cdc7fe1-a4bb-4191-a191-05bb0cd52f70" alt="Profile Screen" width="276" height="600"/>
-<img src="https://github.com/user-attachments/assets/58cf44ba-17ea-48dc-9fe1-248474855665" alt="Profile Screen" width="276" height="600"/>
+<img src="https://github.com/user-attachments/assets/0f035764-cfe0-44e9-a2b6-7473d0a1f62a" alt="Homescreen" width="184" height="400"/>
+<img src="https://github.com/user-attachments/assets/4a87580c-f78b-4dfb-8a78-21cef9d03d6c" alt="Drawer" width="184" height="400"/>
+<img src="https://github.com/user-attachments/assets/9cdc7fe1-a4bb-4191-a191-05bb0cd52f70" alt="Profile Screen" width="184" height="400"/>
+<img src="https://github.com/user-attachments/assets/58cf44ba-17ea-48dc-9fe1-248474855665" alt="Community Profile" width="184" height="400"/>
 
 
 
