@@ -8,6 +8,7 @@ import "package:social/components/screens/home/homescreen.dart";
 import "package:social/components/screens/auth/startuplogin.dart";
 import "package:flutter/material.dart";
 import "package:social/components/screens/posts/addpostypescreen.dart";
+import "package:social/components/screens/posts/commentScreen.dart";
 import "package:social/components/screens/userprofile/edituserprofile.dart";
 import "package:social/components/screens/userprofile/userprofilescreen.dart";
 
@@ -39,6 +40,9 @@ final loggedInRoute = RouteMap(
         ),
     "/post/:type": (route) => MaterialPage(
           child: AddPostTypeScreen(postType: route.pathParameters["type"]!),
-        )
+        ),
+    "/post/comments/:postid": (route) => MaterialPage(
+          child: CommentScreen(postId: route.pathParameters["postid"]!),
+        ),
   },
 );

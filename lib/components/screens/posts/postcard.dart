@@ -37,6 +37,10 @@ class PostCard extends ConsumerWidget {
     Routemaster.of(context).push("/r/${post.communityName}");
   }
 
+  void navigateToPost(BuildContext context) {
+    Routemaster.of(context).push("/post/comments/${post.id}");
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isTypeImage = post.typeOfPost == "Image";
@@ -191,7 +195,9 @@ class PostCard extends ConsumerWidget {
                               Row(
                                 children: [
                                   IconButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      navigateToPost(context);
+                                    },
                                     icon: const Icon(Icons.comment),
                                   ),
                                   Text(

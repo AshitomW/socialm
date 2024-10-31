@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:social/components/controllers/authcontroller.dart';
+import 'package:social/components/model/commentmodel.dart';
 import 'package:social/components/model/communitymodel.dart';
 import 'package:social/components/model/postmodel.dart';
 import 'package:social/components/services/postservice.dart';
@@ -24,6 +25,14 @@ final postControllerProvider = StateNotifierProvider<PostController, bool>((ref)
 final userPostProvider = StreamProvider.family((ref, List<Community> communities) {
   final postController = ref.watch(postControllerProvider.notifier);
   return postController.fetchUserPosts(communities);
+});
+
+final getPostByIdProvider = StreamProvider.family((ref, String postId) {
+  return ref.read(postControllerProvider.notifier).getPostById(postId);
+});
+
+final getPostCommentProvider = StreamProvider.family((ref, String postId) {
+  return ref.read(postControllerProvider.notifier).fetchPostComments(postId);
 });
 
 class PostController extends StateNotifier<bool> {
@@ -163,5 +172,27 @@ class PostController extends StateNotifier<bool> {
   void downvote(Post post) async {
     final user = _ref.read(userDataProvider)!;
     _postservice.downvote(post, user.uid);
+  }
+
+  Stream<Post> getPostById(String postId) {
+    return _postservice.getPostById(postId);
+  }
+
+  void addComment({required BuildContext context, required String text, required Post post}) async {
+    final user = _ref.read(userDataProvider)!;
+    Comment comment = Comment(
+      id: const Uuid().v1(),
+      text: text,
+      createdAt: DateTime.now(),
+      postId: post.id,
+      username: user.name,
+      profilePic: user.profilePicture,
+    );
+    final result = await _postservice.addComment(comment);
+    result.fold((failure) => showSnackBar(context, failure.message), (success) => null);
+  }
+
+  Stream<List<Comment>> fetchPostComments(String postId) {
+    return _postservice.getCommentsOfPost(postId);
   }
 }
