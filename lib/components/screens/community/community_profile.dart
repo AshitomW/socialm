@@ -24,6 +24,7 @@ class CommunityProfile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(userDataProvider)!;
+    final isGuest = !user.isAuthenticated;
     return Scaffold(
       body: ref.watch(getCommunityByNameProvider(name)).when(
           data: (community) {
@@ -62,33 +63,34 @@ class CommunityProfile extends ConsumerWidget {
                               "r/${community.name}",
                               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                             ),
-                            community.moderators.contains(user.uid)
-                                ? OutlinedButton(
-                                    onPressed: () => navigateToModTools(context),
-                                    style: ElevatedButton.styleFrom(
-                                      padding: const EdgeInsetsDirectional.symmetric(
-                                          horizontal: 25, vertical: 8),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20),
+                            if (!isGuest)
+                              community.moderators.contains(user.uid)
+                                  ? OutlinedButton(
+                                      onPressed: () => navigateToModTools(context),
+                                      style: ElevatedButton.styleFrom(
+                                        padding: const EdgeInsetsDirectional.symmetric(
+                                            horizontal: 25, vertical: 8),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(20),
+                                        ),
                                       ),
-                                    ),
-                                    child: const Text("Mod tools"),
-                                  )
-                                : OutlinedButton(
-                                    onPressed: () {
-                                      joinCommunity(
-                                          ref: ref, community: community, context: context);
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      padding: const EdgeInsetsDirectional.symmetric(
-                                          horizontal: 25, vertical: 8),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20),
+                                      child: const Text("Mod tools"),
+                                    )
+                                  : OutlinedButton(
+                                      onPressed: () {
+                                        joinCommunity(
+                                            ref: ref, community: community, context: context);
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        padding: const EdgeInsetsDirectional.symmetric(
+                                            horizontal: 25, vertical: 8),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(20),
+                                        ),
                                       ),
+                                      child: Text(
+                                          community.members.contains(user.uid) ? "Joined" : "Join"),
                                     ),
-                                    child: Text(
-                                        community.members.contains(user.uid) ? "Joined" : "Join"),
-                                  ),
                           ]),
                           Padding(
                             padding: const EdgeInsets.only(top: 10),

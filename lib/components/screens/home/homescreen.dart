@@ -35,6 +35,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     final user = ref.watch(userDataProvider)!;
     final currentTheme = ref.watch(themeDataProvider);
+    final isGuest = !user.isAuthenticated;
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -75,29 +76,31 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         children: Constants.tabWidgets,
       ),
       drawer: const CommunityLists(),
-      endDrawer: const ProfileDrawer(),
-      bottomNavigationBar: CupertinoTabBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Padding(
-              padding: EdgeInsets.all(16),
-              child: Icon(Icons.home),
+      endDrawer: isGuest ? null : const ProfileDrawer(),
+      bottomNavigationBar: isGuest
+          ? null
+          : CupertinoTabBar(
+              items: const [
+                BottomNavigationBarItem(
+                  icon: Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Icon(Icons.home),
+                  ),
+                  label: '',
+                ),
+                BottomNavigationBarItem(
+                  icon: Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Icon(Icons.add),
+                  ),
+                  label: '',
+                ),
+              ],
+              activeColor: currentTheme.iconTheme.color,
+              backgroundColor: currentTheme.dialogBackgroundColor,
+              onTap: onPageChange,
+              currentIndex: _pageNo,
             ),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Padding(
-              padding: EdgeInsets.all(16),
-              child: Icon(Icons.add),
-            ),
-            label: '',
-          ),
-        ],
-        activeColor: currentTheme.iconTheme.color,
-        backgroundColor: currentTheme.dialogBackgroundColor,
-        onTap: onPageChange,
-        currentIndex: _pageNo,
-      ),
     );
   }
 }

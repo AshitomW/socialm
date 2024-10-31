@@ -13,23 +13,41 @@ class FeedScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(userDataProvider)!;
-    return ref.watch(userCommunityProvider(user.uid)).when(
-        data: (communities) {
-          return ref.watch(userPostProvider(communities)).when(
-              data: (posts) {
-                return ListView.builder(
-                    itemCount: posts.length,
-                    itemBuilder: (context, index) {
-                      final post = posts[index];
-                      return PostCard(post: post);
-                    });
-              },
-              error: (error, stackTrace) {
-                return ErrorText(error: error.toString());
-              },
-              loading: () => const Loader());
+    final isGuest = !user.isAuthenticated;
+
+    if (!isGuest) {
+      return ref.watch(userCommunityProvider(user.uid)).when(
+          data: (communities) {
+            return ref.watch(userPostProvider(communities)).when(
+                data: (posts) {
+                  return ListView.builder(
+                      itemCount: posts.length,
+                      itemBuilder: (context, index) {
+                        final post = posts[index];
+                        return PostCard(post: post);
+                      });
+                },
+                error: (error, stackTrace) {
+                  return ErrorText(error: error.toString());
+                },
+                loading: () => const Loader());
+          },
+          error: (error, stackTrace) => ErrorText(error: error.toString()),
+          loading: () => const Loader());
+    }
+
+    return ref.watch(guestPostProvider).when(
+        data: (posts) {
+          return ListView.builder(
+              itemCount: posts.length,
+              itemBuilder: (context, index) {
+                final post = posts[index];
+                return PostCard(post: post);
+              });
         },
-        error: (error, stackTrace) => ErrorText(error: error.toString()),
+        error: (error, stackTrace) {
+          return ErrorText(error: error.toString());
+        },
         loading: () => const Loader());
   }
 }

@@ -34,7 +34,7 @@ class AuthService {
         _auth = auth,
         _googleSignIn = googleSignIn;
 
-  FutureEither<UserModel> signInWithGoogle() async {
+  FutureEither<UserModel> signInWithGoogle(bool isFromLogin) async {
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       final googleAuthentication = await googleUser?.authentication;
@@ -42,8 +42,14 @@ class AuthService {
         accessToken: googleAuthentication?.accessToken,
         idToken: googleAuthentication?.idToken,
       );
-      late UserModel userModel;
-      UserCredential userCredential = await _auth.signInWithCredential(credentials);
+      UserCredential userCredential;
+      if (isFromLogin) {
+        userCredential = await _auth.signInWithCredential(credentials);
+      } else {
+        userCredential = await _auth.currentUser!.linkWithCredential(credentials);
+      }
+      UserModel userModel;
+
       if (userCredential.additionalUserInfo!.isNewUser) {
         userModel = UserModel(
           name: userCredential.user!.displayName ?? "No Name",

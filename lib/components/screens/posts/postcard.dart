@@ -54,6 +54,7 @@ class PostCard extends ConsumerWidget {
 
     final currentTheme = ref.watch(themeDataProvider);
     final user = ref.watch(userDataProvider)!;
+    final isGuest = !user.isAuthenticated;
     return Column(
       children: [
         Container(
@@ -185,6 +186,9 @@ class PostCard extends ConsumerWidget {
                                 children: [
                                   IconButton(
                                     onPressed: () {
+                                      if (isGuest) {
+                                        return;
+                                      }
                                       upVotePost(ref);
                                     },
                                     icon: Icon(
@@ -204,6 +208,9 @@ class PostCard extends ConsumerWidget {
                                   ),
                                   IconButton(
                                     onPressed: () {
+                                      if (isGuest) {
+                                        return;
+                                      }
                                       downVotePost(ref);
                                     },
                                     icon: Icon(
@@ -250,6 +257,7 @@ class PostCard extends ConsumerWidget {
                                   ),
                               IconButton(
                                   onPressed: () {
+                                    if (isGuest) return;
                                     showDialog(
                                         context: context,
                                         builder: (context) => Dialog(

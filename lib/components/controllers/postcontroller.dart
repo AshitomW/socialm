@@ -37,6 +37,11 @@ final getPostCommentProvider = StreamProvider.family((ref, String postId) {
   return ref.read(postControllerProvider.notifier).fetchPostComments(postId);
 });
 
+final guestPostProvider = StreamProvider((ref) {
+  final postController = ref.watch(postControllerProvider.notifier);
+  return postController.fetchGuestPosts();
+});
+
 class PostController extends StateNotifier<bool> {
   final PostService _postservice;
   final StorageRepository _storageRepository;
@@ -218,5 +223,9 @@ class PostController extends StateNotifier<bool> {
       });
       Routemaster.of(context).pop();
     });
+  }
+
+  Stream<List<Post>> fetchGuestPosts() {
+    return _postservice.fetchGuestPost();
   }
 }

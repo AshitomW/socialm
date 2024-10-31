@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:social/components/controllers/authcontroller.dart";
 import "package:social/components/controllers/postcontroller.dart";
 import "package:social/components/model/postmodel.dart";
 import "package:social/components/screens/posts/postcard.dart";
@@ -38,6 +39,8 @@ class _CommentScreenState extends ConsumerState<CommentScreen> {
   @override
   Widget build(BuildContext context) {
     final currentTheme = ref.watch(themeDataProvider);
+    final user = ref.watch(userDataProvider)!;
+    final isGuest = !user.isAuthenticated;
     return Scaffold(
       appBar: AppBar(),
       body: ref.watch(getPostByIdProvider(widget.postId)).when(
@@ -49,11 +52,12 @@ class _CommentScreenState extends ConsumerState<CommentScreen> {
                   height: 10,
                 ),
                 TextField(
+                  enabled: isGuest ? false : true,
                   onSubmitted: (val) => addComment(post),
                   controller: commentController,
                   maxLength: 50,
                   decoration: InputDecoration(
-                    hintText: "Enter Title Here",
+                    hintText: isGuest ? "Sign In To Comment" : "Enter Title Here",
                     fillColor: currentTheme.canvasColor,
                     filled: true,
                     border: InputBorder.none,

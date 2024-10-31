@@ -4,11 +4,13 @@ import 'package:social/components/controllers/authcontroller.dart';
 
 class SignInButton extends ConsumerWidget {
   final String labelString;
+  final bool isFromLogIn;
   final String? imageUrl;
-  const SignInButton({super.key, required this.labelString, this.imageUrl});
+  const SignInButton(
+      {super.key, required this.labelString, this.imageUrl, this.isFromLogIn = true});
 
   void signIn(WidgetRef ref, BuildContext context) {
-    ref.read(authControllerProvider.notifier).signInWithGoogle(context);
+    ref.read(authControllerProvider.notifier).signInWithGoogle(context, isFromLogIn);
   }
 
   @override
