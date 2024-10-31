@@ -1,5 +1,6 @@
 import "package:any_link_preview/any_link_preview.dart";
 import "package:flutter/material.dart";
+import "package:flutter_link_previewer/flutter_link_previewer.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:social/components/controllers/authcontroller.dart";
 import "package:social/components/controllers/postcontroller.dart";
@@ -105,13 +106,12 @@ class PostCard extends ConsumerWidget {
                               ),
                             ),
                           if (isTypeLink)
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.35,
-                              width: double.infinity,
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 15),
                               child: AnyLinkPreview(
-                                  showMultimedia: true,
-                                  displayDirection: UIDirection.uiDirectionHorizontal,
-                                  link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"),
+                                link: post.link!,
+                                key: ValueKey(post.link!),
+                              ),
                             ),
                           if (isTypeText)
                             Container(
