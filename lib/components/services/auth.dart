@@ -52,7 +52,7 @@ class AuthService {
           uid: userCredential.user!.uid,
           isAuthenticated: true,
           score: 0,
-          awards: [],
+          awards: ["til", "gold", "platinum"],
         );
         await _users.doc(userModel.uid).set(userModel.toMap());
       } else {
