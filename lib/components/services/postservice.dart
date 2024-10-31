@@ -41,4 +41,14 @@ class PostService {
               .toList(),
         );
   }
+
+  FutureVoid deletePost(Post post) async {
+    try {
+      return right(_posts.doc(post.id).delete());
+    } on FirebaseException catch (error) {
+      throw error.message!;
+    } catch (error) {
+      return left(Failure(message: error.toString()));
+    }
+  }
 }

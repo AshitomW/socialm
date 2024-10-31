@@ -2,6 +2,7 @@ import "package:any_link_preview/any_link_preview.dart";
 import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:social/components/controllers/authcontroller.dart";
+import "package:social/components/controllers/postcontroller.dart";
 import "package:social/components/model/postmodel.dart";
 import "package:social/core/constants.dart";
 import "package:social/themes/colorscheme.dart";
@@ -10,6 +11,10 @@ import "package:social/themes/themehandler.dart";
 class PostCard extends ConsumerWidget {
   final Post post;
   const PostCard({super.key, required this.post});
+
+  void deletePost(WidgetRef ref, BuildContext context) async {
+    ref.read(postControllerProvider.notifier).deletePost(post, context);
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -75,7 +80,9 @@ class PostCard extends ConsumerWidget {
                               ),
                               if (post.uid == user.uid)
                                 IconButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    deletePost(ref, context);
+                                  },
                                   icon: const Icon(Icons.delete),
                                   color: Colors.red,
                                 )
