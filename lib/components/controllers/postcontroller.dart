@@ -154,4 +154,14 @@ class PostController extends StateNotifier<bool> {
     result.fold((failure) => showSnackBar(context, "Could not delete the post. Try again later !"),
         (success) => showSnackBar(context, "Successfully deleted the post"));
   }
+
+  void upvote(Post post) async {
+    final user = _ref.read(userDataProvider);
+    _postservice.upvote(post, user!.uid);
+  }
+
+  void downvote(Post post) async {
+    final user = _ref.read(userDataProvider)!;
+    _postservice.downvote(post, user.uid);
+  }
 }

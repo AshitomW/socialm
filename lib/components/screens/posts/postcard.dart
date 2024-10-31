@@ -1,6 +1,6 @@
 import "package:any_link_preview/any_link_preview.dart";
 import "package:flutter/material.dart";
-import "package:flutter_link_previewer/flutter_link_previewer.dart";
+
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:social/components/controllers/authcontroller.dart";
 import "package:social/components/controllers/postcontroller.dart";
@@ -15,6 +15,14 @@ class PostCard extends ConsumerWidget {
 
   void deletePost(WidgetRef ref, BuildContext context) async {
     ref.read(postControllerProvider.notifier).deletePost(post, context);
+  }
+
+  void upVotePost(WidgetRef ref) async {
+    ref.read(postControllerProvider.notifier).upvote(post);
+  }
+
+  void downVotePost(WidgetRef ref) async {
+    ref.read(postControllerProvider.notifier).downvote(post);
   }
 
   @override
@@ -129,7 +137,9 @@ class PostCard extends ConsumerWidget {
                               Row(
                                 children: [
                                   IconButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      upVotePost(ref);
+                                    },
                                     icon: Icon(
                                       Constants.up,
                                       size: 30,
@@ -146,11 +156,13 @@ class PostCard extends ConsumerWidget {
                                     ),
                                   ),
                                   IconButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      downVotePost(ref);
+                                    },
                                     icon: Icon(
                                       Constants.down,
                                       size: 30,
-                                      color: post.upvotes.contains(user.uid)
+                                      color: post.downvotes.contains(user.uid)
                                           ? Colorscheme.blueColor
                                           : null,
                                     ),
