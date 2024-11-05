@@ -1,4 +1,4 @@
-# Reddit-like Clone
+# Reddit Clone
 
 A Reddit-like application built with Dart and Flutter, utilizing Firebase for authentication, database, and storage. This app allows users to create posts, comment, and engage with others in a community-like environment.
 
@@ -8,7 +8,6 @@ A Reddit-like application built with Dart and Flutter, utilizing Firebase for au
 - Create, edit, and delete posts
 - Comment on posts
 - Google sign-in integration
-- Responsive design with Flutter
 - Local storage using shared preferences
 
 ## Dependencies
